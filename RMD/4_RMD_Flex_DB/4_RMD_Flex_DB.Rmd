@@ -1,0 +1,87 @@
+---
+title: "`r params$dynamictitle`"
+date: "`r params$reportdate`"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    logo: "logo.png"
+    favicon: "logo.png"
+params:
+  reportdate: !r Sys.Date()
+  dynamictitle: "Indy Coders Dashboard"
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+
+library(tidyverse)
+library(magrittr)
+library(stringr)
+
+# for 1
+library(leaflet)
+
+#for 2
+library(rbokeh)
+
+#for 3, 4
+library(quantmod)
+library(dygraphs)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+starbucks <- read_csv("~/Indy.Code-2018-04-17-RMarkdown-Session/htmlwidgets/1_htmlwidgets_Leaflet_Starbucks/data.csv")
+
+
+starbucks_IN <- starbucks %>%
+  filter(Country== 'US', State=='IN')%>% 
+  select(Brand, `Store Number`, `Ownership Type`, City,	State,	Zip, Country, Coordinates,	Latitude,	Longitude, Name)
+
+
+leaflet() %>% addTiles() %>% setView(-86.164367, 39.764500, zoom = 12) %>% 
+
+addMarkers(data = starbucks_IN, lat = ~ Latitude, lng = ~ Longitude, popup = starbucks_IN$Name) %>%
+  addPopups(-86.164367, 39.764500, 'The <b> Indiana Convention Center</b>')
+```
+
+### Chart B
+
+```{r}
+
+bike <- read.csv("~/Indy.Code-2018-04-17-RMarkdown-Session/htmlwidgets/2_htmlwidgets_Indy_Bike_Stations/Bike_Share_Stations.csv")
+bike_small <- bike %>% select(LATITUDE, LONGITUDE, NUMBER_OF_DOCKS)
+gmap(lat = 39.768597, lng = -86.162682, zoom = 13, width = 900, height = 400, map_type = "road_map") %>% ly_points(LONGITUDE, LATITUDE, data = bike_small, fill_alpha = 0.5, size = 1.25*NUMBER_OF_DOCKS, color = "black", hover = c(NUMBER_OF_DOCKS))
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r include = FALSE}
+getSymbols("INDI918URN", src = "FRED")
+```
+
+```{r}
+names(INDI918URN) = "rate"
+dygraph(INDI918URN, main = "Unemployment Rate in Indianapolis-Carmel-Anderson, IN")
+```
+
+### Chart D
+
+```{r include = FALSE}
+getSymbols("LLY", from = "2014-01-01", auto.assign=TRUE)
+```
+
+```{r}
+dygraph(LLY[,2:4], main = "Eli Lilly Stock Prices", group = "stocks") %>%  
+  dyRangeSelector() %>%
+  dySeries(c("LLY.Low", "LLY.Close", "LLY.High"), label = "LLY")
+```

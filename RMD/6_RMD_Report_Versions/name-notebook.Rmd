@@ -1,0 +1,30 @@
+---
+title: "R Notebook"
+params:
+  name: my-name
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(reticulate)
+py_available(initialize = TRUE)
+```
+
+# `r params$name` Report
+
+
+## in Python
+```{python}
+print(r.params['name'])
+```
+
+## in R
+```{r}
+print(params$name)
+```
+
+## Check it out
+
+[Python & R - Together Forever](https://blog.rstudio.com/2018/03/26/reticulate-r-interface-to-python)
