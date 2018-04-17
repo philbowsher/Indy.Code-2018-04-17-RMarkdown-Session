@@ -321,10 +321,12 @@ storms <-tribble(
 </tr>
 </table>
 
-## rmarkdown::render -- `1_RMD_Stocks`
+## rmarkdown Parameters -- `1_RMD_Stocks`
 
-- rmarkdown::render(“Stocks.Rmd”, params = list(symbol=‘IBM’))
-- https://beta.rstudioconnect.com/content/3132/Job_Scheduling_R_Markdown_Reports_via_R.html
+- Parameters are useful when you want to re-render the same report with distinct values for various key inputs
+- R Markdown documents can include one or more parameters whose values can be set when you render the report
+- https://rmarkdown.rstudio.com/developer_parameterized_reports.html
+- https://rmarkdown.rstudio.com/lesson-6.html
 
 
 
@@ -551,6 +553,7 @@ geom_point(mapping = aes(x = displ, y = hwy))
 - rmarkdown::render(“Stocks.Rmd”, params = list(symbol=‘IBM’))
 - https://beta.rstudioconnect.com/content/3132/Job_Scheduling_R_Markdown_Reports_via_R.html
 - 6_RMD_Report_Versions
+- 1_RMD_Stocks
 
 
 
@@ -664,7 +667,7 @@ geom_point(mapping = aes(x = displ, y = hwy))
  - Expects no knowledge of web technologies like HTML, CSS, or JavaScript (but you can leverage them, if you know them)
 
 ### Benefits & Features:
- - Accessible to non-programmers
+ - Accessible to non-web programmers
  - Great for exploratory data analysis, visualizations & dashboards
  - Utilize existing R code
  
@@ -678,15 +681,6 @@ geom_point(mapping = aes(x = displ, y = hwy))
  - [Shiny Cheat Sheet](http://shiny.rstudio.com/articles/cheatsheet.html)
 - [Enhance with Shiny functions and R code](http://shiny.rstudio.com/reference/shiny/latest/)
 - [Enhance with Shiny Widgets](http://shiny.rstudio.com/gallery/widget-gallery.html)
-
-## Intro Process
-- https://shiny.rstudio.com/articles/build.html
- - https://github.com/rstudio/shiny-examples/
- - http://shiny.rstudio.com/gallery/single-file-shiny-app.html
- - Panels
- - ToothGrowth
- - http://shiny.rstudio.com/gallery/basic-datatable.html
- - http://shiny.rstudio.com/gallery/reactivity.html
  
 ## HTML Widgets &mdash; Leaflet Example - 2_htmlwidgets_Shiny_Leaflet_Starbucks
 
@@ -749,89 +743,7 @@ function(input, output) {
 }
 ```
 
-## Shiny Development Example - 1_Shiny_ToothGrowth_Basic
-
-- Go [here](http://shiny.rstudio.com/gallery/basic-datatable.html)
-- Create a new multi file shiny app in the IDE by going to 'File' and select 'New File' and select 'Shiny Web App...' and create a new multiple file app and title it 'clustering'
-- Copy over the ui.R and app.R files with the code found [here:](https://github.com/rstudio/shiny-examples/tree/master/030-basic-datatable)
-- Click 'Run App' in the IDE when done
-
-## Shiny Example - Interactive Plot ToothGrowth 2_Shiny_Basic_Plots
-```{r, echo=FALSE}
-library(ggplot2)
-library(Cairo)   # For nicer ggplot2 output when deployed on Linux
-library(datasets)
-
-dataset <- ToothGrowth
-
-ui <- fluidPage(
-  fluidRow(
-    
-    column(width = 6,
-           plotOutput("plot1", height = 350,
-                      click = "plot1_click",
-                      brush = brushOpts(
-                        id = "plot1_brush"
-                      )
-           ),
-           actionButton("exclude_toggle", "Toggle points"),
-           actionButton("exclude_reset", "Reset")
-    )
-  )
-)
-
-server <- function(input, output) {
-  # For storing which rows have been excluded
-  vals <- reactiveValues(
-    keeprows = rep(TRUE, nrow( dataset))
-  )
-  
-  output$plot1 <- renderPlot({
-    # Plot the kept and excluded points as two separate data sets
-    keep    <-  dataset[ vals$keeprows, , drop = FALSE]
-    exclude <-  dataset[!vals$keeprows, , drop = FALSE]
-    
-    ggplot(keep, aes(dose, len)) + geom_point() +
-      geom_smooth(method = lm, fullrange = TRUE, color = "black") +
-      geom_point(data = exclude, shape = 21, fill = NA, color = "black", alpha = 0.25) +
-      coord_cartesian(xlim = c(0.5, 2.0), ylim = c(5,35))
-  })
-  
-  # Toggle points that are clicked
-  observeEvent(input$plot1_click, {
-    res <- nearPoints( dataset, input$plot1_click, allRows = TRUE)
-    
-    vals$keeprows <- xor(vals$keeprows, res$selected_)
-  })
-  
-  # Toggle points that are brushed, when button is clicked
-  observeEvent(input$exclude_toggle, {
-    res <- brushedPoints( dataset, input$plot1_brush, allRows = TRUE)
-    
-    vals$keeprows <- xor(vals$keeprows, res$selected_)
-  })
-  
-  # Reset all points
-  observeEvent(input$exclude_reset, {
-    vals$keeprows <- rep(TRUE, nrow( dataset))
-  })
-  
-}
-
-shinyApp(ui, server)
-```
-
-## Shiny Development Example - 3_Shiny_ToothGrowth_Plots
-
-<div class="columns-2">
-- [Example 1](http://shiny.rstudio.com/gallery/plot-interaction-exclude.html)
-- [Example 2](http://shiny.rstudio.com/gallery/plot-plus-three-columns.html)
-
-
-
-</div>
-
-# Part 2 - shinydashboard
+# shinydashboard
 
 ## Interactive-Reporting-Dashboards-in-Shiny
 
@@ -839,30 +751,15 @@ shinyApp(ui, server)
 - [Interactive plots](http://shiny.rstudio.com/gallery/)
 - [1_Shiny_Basic_Plots](http://shiny.rstudio.com/gallery/plot-interaction-exclude.html)
 
-## Shiny Development Example - 4_Shiny_shinydashboard_basic
+## Shiny Development Example - flights-dashboard
 
 - [How to develop a Shiny dashboard](http://db.rstudio.com/best-practices/dashboards/)
 - [Intro to dashboards](https://github.com/rstudio/bigdataclass2018/blob/master/assets/workbook/09-dashboards.Rmd)
-- [Pharmacometrics: some Shiny applications](http://webpopix.org/shiny/ShinyExamples.html)
 - [CDC PrEP Guidelines](https://prism.shinyapps.io/cdc-prep-guidelines/)
 - [CDC Zika Data](https://chendaniely.shinyapps.io/zika_cdc_dashboard/)
 - [shinydashboard](https://rstudio.github.io/shinydashboard/)
-- 4_Shiny_shinydashboard_basic
 - [Material design in Shiny apps](https://ericrayanderson.github.io/shinymaterial/)
 
-
-## Shiny Development Example - 4_Shiny_Immunogenicity_3Tier
-
-- shinydashboard
-- ADA three‐tiered testing strategy is deployed to assess ADA on sample data.
-- [Example](https://beta.rstudioconnect.com/content/2769/)
-
-## Shiny Development Example - 4_Shiny_Immunogenicity_htmlTemplate
-
-- Simple Immunogenicity report via Shiny html template
-- [HTML Templates](http://shiny.rstudio.com/articles/templates.html)
-- [Developing and deploying large scale Shiny applications ](https://channel9.msdn.com/Events/useR-international-R-User-conferences/useR-International-R-User-2017-Conference/Developing-and-deploying-large-scale-Shiny-applications-for-non-life-insurance)
-- [Example](https://beta.rstudioconnect.com/content/2771/)
 
 ## shiny Package & Shiny Server
 
@@ -881,32 +778,6 @@ Shiny Server is a server program that lets you host and manage shiny web applica
 <td><img src="pk3.png" width="200" /></td>
 </tr>
 </table>
-
-## What Shiny functions are being used below?
-```{r, echo=FALSE}
-library(d3scatter)
-library(crosstalk)
-
-shared_ToothGrowth <- SharedData$new(ToothGrowth)
-bscols(widths = c(3,NA,NA),
-  list(
-    filter_checkbox("supp", "supp", shared_ToothGrowth, ~supp, inline = TRUE),
-    filter_slider("dose", "dose", shared_ToothGrowth, ~dose, width = "100%")
-  ),
-  d3scatter(shared_ToothGrowth, ~dose, ~len, ~factor(supp), width="100%", height=250),
-  d3scatter(shared_ToothGrowth, ~len, ~dose, ~factor(supp), width="100%", height=250)
-)
-```
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -927,10 +798,8 @@ https://beta.rstudioconnect.com/content/2671/Combining-Shiny-R-Markdown.html
 ## Shiny/R Markdown Examples
 
 <div class="columns-2">
-- [FDA Adverse (Drug) Event Dashboard](https://github.com/statwonk/openfda-dashboard)
-- [interAdapt - An Interactive Planner for Group Sequential, Adaptive Enrichment Designs](https://michaelrosenblum.shinyapps.io/interAdapt/)
+
 - [Export a report from Shiny - Simple Example](http://shiny.rstudio.com/gallery/download-knitr-reports.html)
- - [AplusB: A + B design investigator for phase I dose-escalation studies](https://graham-wheeler.shinyapps.io/AplusB/)
 
 <div class="img-col">
    ![rmarkdown](rmddownload.png)

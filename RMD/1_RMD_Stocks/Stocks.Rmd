@@ -9,7 +9,7 @@ params:
 
 ## `r params$symbol`
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
 library(quantmod)
 
