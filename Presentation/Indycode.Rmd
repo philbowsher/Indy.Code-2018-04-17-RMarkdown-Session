@@ -609,7 +609,7 @@ geom_point(mapping = aes(x = displ, y = hwy))
 - R	Notebook	SQL	language	engine
 
 ## Database R Markdown Dashboard
-- 6_RMD_Combined_DB
+- 5_RMD_Flex_Database
 - https://rviews.rstudio.com/2017/10/18/database-queries-with-r/
 - https://community.rstudio.com/t/why-does-rstudio-documentation-recommend-odbc-vs-jdbc-drivers/2381/5
 
