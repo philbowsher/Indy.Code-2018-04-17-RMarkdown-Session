@@ -15,7 +15,8 @@ library(metricsgraphics)
 library(RColorBrewer)
 library(ggplot2)
 
-con <- dbConnect(odbc(), "SQL Server")
+con <- dbConnect(odbc::odbc(), "SQL Server (DSN)")
+#Just pointers to tables and not downloading data
 flights <- tbl(con, "indyflights")
 airports <- tbl(con, "airports")
 airlines <- tbl(con, "airlines")

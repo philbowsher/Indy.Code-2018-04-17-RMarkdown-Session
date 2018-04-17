@@ -1,3 +1,5 @@
+#Note: for this to work you need to get a Google Maps API key and either provide it as an argument to gmap() or set it as an option in your R session options(GMAP_API_KEY=xxx) or set it as a system environment variable, GMAP_API_KEY.
+
 library(rbokeh)
 suppressMessages(library(dplyr))
 bike <- read.csv("~/Indy.Code-2018-04-17-RMarkdown-Session/htmlwidgets/2_htmlwidgets_Indy_Bike_Stations/Bike_Share_Stations.csv")

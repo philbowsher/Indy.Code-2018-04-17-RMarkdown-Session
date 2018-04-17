@@ -1,1 +1,1 @@
-data <- read.csv("~/shiny-rmd-APIs-pharma-session-2017-11-08/2_htmlwidgets_Shiny_Leaflet_Starbucks/data.csv", header=TRUE)
+data <- read.csv("~/Indy.Code-2018-04-17-RMarkdown-Session/Shiny/2_htmlwidgets_Shiny_Leaflet_Starbucks/data.csv", header=TRUE)

@@ -17,7 +17,7 @@ print(params$carrier)
 
 library(odbc)
 library(DBI)
-con <- dbConnect(odbc::odbc(), "Postgres (DSN)")
+con <- dbConnect(odbc::odbc(), "SQL Server (DSN)")
 
 # pull data using DBI
 airlines <- dbReadTable(con, "airlines")

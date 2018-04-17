@@ -1,12 +1,4 @@
-# Call the Python and R Notebook
-
-rmarkdown::render(
-  "name-notebook.Rmd"
-  , params = list(name = "Cole")
-  , output_file="cole.html"
-  ) %>% 
-rstudioapi::viewer() # this opens the output in RStudio
-
+# https://github.com/philbowsher/Job-Scheduling-R-Markdown-Reports-via-R
 
 # Build a bunch of animal reports
 animals <- list("Elephant", "Giraffe", "Koala", "Anaconda")

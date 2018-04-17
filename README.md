@@ -7,11 +7,19 @@ https://indycode.amegala.com/Sessions/561
 
 Live Presentation is here:
 
+https://beta.rstudioconnect.com/content/3458/
 
+Live examples here:
 
+https://rstudio.cloud/project/31232
 
 Other apps and reports are here:
 
+Indy Coders Dashboard
+http://colorado.rstudio.com:3939/content/1040/4_RMD_Flex_DB.html
+
+Indy Flights
+http://colorado.rstudio.com:3939/content/1039/6_RMD_Combined_DB.html
 
 Presentations and code from workshop.
 
